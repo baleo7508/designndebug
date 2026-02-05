@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DND Mode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; cursor: none; }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Fake cursor */
+    .cursor {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(14px);
+      border-radius: 26px;
+      padding: 42px;
+      width: 90%;
+      max-width: 460px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+
+    h1 { font-weight: 700; margin-bottom: 12px; }
+    p { opacity: 0.9; margin-bottom: 28px; }
+
+    button {
+      position: absolute;
+      padding: 14px 26px;
+      border: none;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    button:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.35); }
+
+    #yesBtn {
+      background: #00e676;
+      color: #000;
+      left: 50%;
+      top: 70%;
+      transform: translateX(-50%);
+    }
+
+    #noBtn {
+      background: #ff5252;
+      color: #fff;
+      top: 10%;
+      left: 10%;
+    }
+
+    #dndDesignBtn {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #000;
+      display: none;
+    }
+
+    #dndTravelBtn {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: #fff;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <div class="card">
+    <h1 id="title">Quick question 🎨</h1>
+    <p id="subtitle">Just answer honestly 😄</p>
+  </div>
+
+  <button id="yesBtn">Let’s go ✈️</button>
+  <button id="noBtn">Still designing 😤</button>
+  <button id="dndDesignBtn">DND = Design N Debug 🎨💻</button>
+  <button id="dndTravelBtn">DND = Do Not Disturb ✈️🌍</button>
+
+  <audio id="boing" src="https://assets.mixkit.co/sfx/preview/mixkit-cartoon-voice-jump-215.mp3"></audio>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const dndDesignBtn = document.getElementById('dndDesignBtn');
+    const dndTravelBtn = document.getElementById('dndTravelBtn');
+    const title = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+    const boing = document.getElementById('boing');
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    function teleport(btn) {
+      const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
+      boing.currentTime = 0;
+      boing.play();
+    }
+
+    // NO button always escapes
+    noBtn.addEventListener('mousemove', () => teleport(noBtn));
+
+    // First choice
+    yesBtn.addEventListener('click', () => {
+      title.innerText = 'Which DND do you choose 🤔';
+      subtitle.innerText = 'No pressure 😌';
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+      dndDesignBtn.style.display = 'block';
+      dndTravelBtn.style.display = 'block';
+      teleport(dndDesignBtn);
+      teleport(dndTravelBtn);
+    });
+
+    // Design DND also escapes
+    dndDesignBtn.addEventListener('mousemove', () => teleport(dndDesignBtn));
+
+    // Travel DND = final transition
+    dndTravelBtn.addEventListener('click', () => {
+      document.body.style.transition = 'background 0.6s ease';
+      document.body.style.background = '#000';
+
+      title.innerText = 'From screens to skies ✈️';
+      subtitle.innerText = 'Travel mode ON';
+
+      dndDesignBtn.style.display = 'none';
+      dndTravelBtn.style.display = 'none';
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
